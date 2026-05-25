@@ -85,4 +85,3 @@ export function SettingsForm({ profile }: Props) {
     </div>
   )
 }
-EOF
