@@ -46,6 +46,38 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
   redirect('/dashboard')
 }
 
+export async function registerAction(formData: FormData): Promise<ActionResult> {
+  const raw = {
+    full_name: formData.get('full_name') as string,
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+
+  const parsed = registerSchema.safeParse(raw)
+  if (!parsed.success) {
+    return { error: parsed.error.errors[0].message }
+  }
+
+  const supabase = createClient()
+  const { error } = await supabase.auth.signUp({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    options: {
+      data: { full_name: parsed.data.full_name },
+    },
+  })
+
+  if (error) {
+    if (error.message.includes('already registered')) {
+      return { error: 'این ایمیل قبلاً ثبت‌نام کرده' }
+    }
+    return { error: 'خطا در ثبت‌نام. دوباره تلاش کنید' }
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/dashboard')
+}
+
 export async function logoutAction() {
   const supabase = createClient()
   await supabase.auth.signOut()
