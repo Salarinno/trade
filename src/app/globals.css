@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: #080C0F; color: #E8EDF2; font-family: 'Vazirmatn', sans-serif; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #080C0F; }
+::-webkit-scrollbar-thumb { background: #1E2D3D; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #243040; }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }

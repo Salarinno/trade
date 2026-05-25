@@ -1,0 +1,96 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { registerAction } from '../actions'
+
+export default function RegisterPage() {
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    const result = await registerAction(new FormData(e.currentTarget))
+    if (result?.error) {
+      setError(result.error)
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-bg flex items-center justify-center p-4" dir="rtl">
+      <div className="w-full max-w-sm">
+
+        <div className="text-center mb-8">
+          <div className="font-mono text-green text-lg tracking-widest mb-1">
+            Trade<span className="text-text-muted">//</span>Log
+          </div>
+          <p className="text-text-secondary text-sm">ثبت‌نام رایگان</p>
+        </div>
+
+        <div className="bg-bg-1 border border-border rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[10px] text-text-muted tracking-widest uppercase">نام کامل</label>
+              <input
+                name="full_name"
+                type="text"
+                required
+                placeholder="علی رضایی"
+                className="bg-bg-2 border border-border rounded px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-2 transition-colors"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[10px] text-text-muted tracking-widest uppercase">ایمیل</label>
+              <input
+                name="email"
+                type="email"
+                required
+                placeholder="example@email.com"
+                className="bg-bg-2 border border-border rounded px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-2 transition-colors"
+                dir="ltr"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="font-mono text-[10px] text-text-muted tracking-widest uppercase">رمز عبور</label>
+              <input
+                name="password"
+                type="password"
+                required
+                placeholder="حداقل ۶ کاراکتر"
+                className="bg-bg-2 border border-border rounded px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-border-2 transition-colors"
+                dir="ltr"
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-trade/10 border border-red-trade/20 rounded px-3 py-2 text-sm text-red-trade">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-green text-black font-medium text-sm py-2.5 rounded transition-opacity hover:opacity-85 disabled:opacity-50 mt-1"
+            >
+              {loading ? 'در حال ثبت‌نام...' : 'ثبت‌نام رایگان'}
+            </button>
+
+          </form>
+        </div>
+
+        <p className="text-center text-sm text-text-secondary mt-4">
+          حساب دارید؟{' '}
+          <Link href="/auth/login" className="text-green hover:opacity-80">ورود</Link>
+        </p>
+
+      </div>
+    </div>
+  )
+}
